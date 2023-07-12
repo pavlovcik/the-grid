@@ -13,7 +13,7 @@ const html = {
   scripts = {
     root: "scripts/",
     entries: [
-      "shader.ts",
+      "the-grid.ts",
       // "devpool-claims/index.ts", "audit-report/audit.ts", "onboarding/onboarding.ts", "key-generator/keygen.ts"
     ],
   },
