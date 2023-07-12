@@ -1,19 +1,43 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
+    <script>
+      new EventSource("/esbuild").addEventListener("change", e => {
+        const { added, removed, updated } = JSON.parse(e.data);
+
+        if (!added.length && !removed.length && updated.length === 1) {
+          for (const link of document.getElementsByTagName("link")) {
+            const url = new URL(link.href);
+
+            if (url.host === location.host && url.pathname === updated[0]) {
+              const next = link.cloneNode();
+              next.href = updated[0] + "?" + Math.random().toString(36).slice(2);
+              next.onload = () => link.remove();
+              link.parentNode.insertBefore(next, link.nextSibling);
+              return;
+            }
+          }
+        }
+
+        location.reload();
+      });
+    </script>
+
     <title>WebGL Shader Example</title>
     <style>
-        body, html, canvas {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
+      body,
+      html,
+      canvas {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <canvas id="glcanvas"></canvas>
     <script src="shader.js"></script>
-</body>
+  </body>
 </html>
