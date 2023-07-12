@@ -1,4 +1,4 @@
-window.onload = () => {
+window.onload = function onLoadHandler() {
   const canvas = document.getElementById("glcanvas") as HTMLCanvasElement;
   const gl = canvas.getContext("webgl", { alpha: true }) as WebGLRenderingContext;
   // Enable alpha blending
@@ -23,22 +23,21 @@ window.onload = () => {
   gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
   gl.enableVertexAttribArray(position);
 
-  function render() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    gl.viewport(0, 0, canvas.width, canvas.height);
-
-    gl.clearColor(0, 0, 0, 0);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-
-    requestAnimationFrame(render);
-  }
-
-  render();
+  render(canvas, gl);
 };
 
+function render(canvas: HTMLCanvasElement, gl: WebGLRenderingContext) {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  gl.viewport(0, 0, canvas.width, canvas.height);
+
+  gl.clearColor(0, 0, 0, 0);
+  gl.clear(gl.COLOR_BUFFER_BIT);
+
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+  requestAnimationFrame(() => render(canvas, gl));
+}
 class Shader {
   private gl: WebGLRenderingContext;
   private shaderProgram: WebGLProgram;
