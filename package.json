@@ -1,0 +1,19 @@
+{
+  "license": "MIT",
+  "scripts": {
+    "start": "run-s start:ui",
+    "format": "prettier --write .",
+    "build": "run-s utils:build",
+    "start:ui": "tsx server.ts",
+    "utils:build": "tsx esbuild.ts"
+  },
+  "dependencies": {
+    "@types/node": "^20.4.1",
+    "esbuild": "^0.18.11",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.0.0",
+    "tsx": "^3.12.7",
+    "typescript": "^5.1.6"
+  },
+  "packageManager": "yarn@3.5.0"
+}
