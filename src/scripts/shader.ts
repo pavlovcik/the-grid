@@ -55,12 +55,21 @@ class Shader {
 
     const fragmentShaderSource = `
         precision mediump float;
+
+        float rand(vec2 n) {
+            return fract(sin(dot(n, vec2(12.9898, 4.1414))) * 43758.5453);
+        }
+
         void main() {
             vec2 tilePosition = mod(gl_FragCoord.xy, 24.0);
+            vec2 tileNumber = floor(gl_FragCoord.xy / 24.0);
+            float brightness = rand(tileNumber);
+            vec4 backgroundColor = vec4(vec3(brightness), 1.0);
+
             if (tilePosition.x > 23.0 && tilePosition.y < 1.0) {
                 gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
             } else {
-                discard;
+                gl_FragColor = backgroundColor;
             }
         }
     `;
