@@ -1,6 +1,9 @@
 window.onload = () => {
   const canvas = document.getElementById("glcanvas") as HTMLCanvasElement;
-  const gl = canvas.getContext("webgl", { alpha: true });
+  const gl = canvas.getContext("webgl", { alpha: true }) as WebGLRenderingContext;
+  // Enable alpha blending
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
   if (!gl) {
     alert("Unable to initialize WebGL. Your browser or machine may not support it.");
@@ -63,8 +66,9 @@ class Shader {
         void main() {
             vec2 tilePosition = mod(gl_FragCoord.xy, 24.0);
             vec2 tileNumber = floor(gl_FragCoord.xy / 24.0);
-            float brightness = rand(tileNumber);
-            vec4 backgroundColor = vec4(vec3(brightness), 1.0);
+            float randomVal = rand(tileNumber);
+            float opacity = randomVal * randomVal;
+            vec4 backgroundColor = vec4(vec3(1.0), opacity);
 
             if (tilePosition.x > 23.0 && tilePosition.y < 1.0) {
                 gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
