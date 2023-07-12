@@ -1,123 +1,137 @@
-window.onload = function onLoadHandler() {
-  const canvas = document.getElementById("glcanvas") as HTMLCanvasElement;
-  const gl = canvas.getContext("webgl", { alpha: true }) as WebGLRenderingContext;
-  // Enable alpha blending
-  gl.enable(gl.BLEND);
-  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+// Create canvas and WebGL context
+const canvas = document.createElement("canvas");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+document.body.appendChild(canvas);
 
-  if (!gl) {
-    alert("Unable to initialize WebGL. Your browser or machine may not support it.");
-    return;
+const gl = canvas.getContext("webgl") as WebGLRenderingContext;
+
+// Enable alpha blending
+gl.enable(gl.BLEND);
+gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+// Define shader sources
+const vertexShaderSource = `
+    attribute vec2 a_position;
+
+    void main() {
+        gl_Position = vec4(a_position, 0, 1);
+    }
+`;
+
+const fragmentShaderSource = `
+    precision mediump float;
+
+    uniform float u_time;
+
+    float rand(vec2 n) {
+        return fract(sin(dot(n, vec2(12.9898, 4.1414))) * 43758.5453);
+    }
+
+    void main() {
+        vec3 color = vec3(128.0/255.0, 128.0/255.0, 128.0/255.0); // #808080
+        vec2 tilePosition = mod(gl_FragCoord.xy, 24.0);
+        vec2 tileNumber = floor(gl_FragCoord.xy / 24.0);
+
+        float period = rand(tileNumber) * 9.0 + 1.0; // Random value in the range [1, 10]
+        float phase = fract(u_time / period);
+        float opacity = 1.0 - abs(phase * 2.0 - 1.0);
+
+        vec4 backgroundColor = vec4(color, opacity);
+
+        if (tilePosition.x > 23.0 && tilePosition.y < 1.0) {
+            gl_FragColor = vec4(color, 1.0); // Full opacity for the dot
+        } else {
+            gl_FragColor = backgroundColor;
+        }
+    }
+`;
+
+// Create and compile shaders
+const vertexShader = gl.createShader(gl.VERTEX_SHADER)!;
+gl.shaderSource(vertexShader, vertexShaderSource);
+gl.compileShader(vertexShader);
+
+const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER)!;
+gl.shaderSource(fragmentShader, fragmentShaderSource);
+gl.compileShader(fragmentShader);
+
+// Create program, attach shaders, and link
+const program = gl.createProgram();
+gl.attachShader(program, vertexShader);
+gl.attachShader(program, fragmentShader);
+gl.linkProgram(program);
+
+// Verify program link status
+if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+  console.error("Unable to initialize the shader program: " + gl.getProgramInfoLog(program));
+  return;
+}
+
+// Use the program
+gl.useProgram(program);
+
+// Get location of time uniform
+const timeUniformLocation = gl.getUniformLocation(program, "u_time");
+
+// Define screen corners
+const screenCorners = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]);
+
+// Create and populate position buffer
+const positionBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, screenCorners, gl.STATIC_DRAW);
+
+// Get location of position attribute
+const positionLocation = gl.getAttribLocation(program, "a_position");
+
+// Enable position attribute
+gl.enableVertexAttribArray(positionLocation);
+gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+// ...
+
+function resizeCanvasToDisplaySize(canvas: HTMLCanvasElement) {
+  // Lookup the size the browser is displaying the canvas.
+  var displayWidth = canvas.clientWidth;
+  var displayHeight = canvas.clientHeight;
+
+  // Check if the canvas is not the same size.
+  if (canvas.width != displayWidth || canvas.height != displayHeight) {
+    // Make the canvas the same size
+    canvas.width = displayWidth;
+    canvas.height = displayHeight;
+
+    // Update WebGL viewport to match
+    gl.viewport(0, 0, canvas.width, canvas.height);
   }
+}
 
-  const shader = new Shader(gl);
-  shader.use();
+// ...
 
-  const vertices = new Float32Array([-1, 1, -1, -1, 1, 1, 1, -1]);
+// Handle window resize
+window.addEventListener("resize", () => {
+  resizeCanvasToDisplaySize(canvas);
+});
 
-  const buffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+// ...
 
-  const position = gl.getAttribLocation(shader.getProgram(), "position");
-  gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
-  gl.enableVertexAttribArray(position);
+// Render function
+function render() {
+  resizeCanvasToDisplaySize(canvas); // Check and update canvas size each frame
 
-  render(canvas, gl);
-};
-
-function render(canvas: HTMLCanvasElement, gl: WebGLRenderingContext) {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  gl.viewport(0, 0, canvas.width, canvas.height);
-
-  gl.clearColor(0, 0, 0, 0);
+  gl.clearColor(0.0, 0.0, 0.0, 1.0);
   gl.clear(gl.COLOR_BUFFER_BIT);
 
+  // Update time uniform
+  gl.uniform1f(timeUniformLocation, performance.now() / 1000.0);
+
+  // Draw
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
-  requestAnimationFrame(() => render(canvas, gl));
+  // Request next frame
+  requestAnimationFrame(render);
 }
-class Shader {
-  private gl: WebGLRenderingContext;
-  private shaderProgram: WebGLProgram;
 
-  constructor(gl: WebGLRenderingContext) {
-    this.gl = gl;
-    this.shaderProgram = this.createShaderProgram();
-  }
-
-  private createShaderProgram(): WebGLProgram {
-    const vertexShaderSource = `
-            attribute vec2 position;
-            void main() {
-                gl_Position = vec4(position, 0.0, 1.0);
-            }
-        `;
-
-    const fragmentShaderSource = `
-        precision mediump float;
-
-        float rand(vec2 n) {
-            return fract(sin(dot(n, vec2(12.9898, 4.1414))) * 43758.5453);
-        }
-
-        void main() {
-            vec3 color = vec3(128.0/255.0, 128.0/255.0, 128.0/255.0); // #808080
-            vec2 tilePosition = mod(gl_FragCoord.xy, 24.0);
-            vec2 tileNumber = floor(gl_FragCoord.xy / 24.0);
-            float randomVal = rand(tileNumber);
-            float opacity = randomVal * randomVal;
-            vec4 backgroundColor = vec4(color, opacity);
-
-            if (tilePosition.x > 23.0 && tilePosition.y < 1.0) {
-                gl_FragColor = vec4(color, 1.0); // Full opacity for the dot
-            } else {
-                gl_FragColor = backgroundColor;
-            }
-        }
-    `;
-
-    const vertexShader = this.loadShader(this.gl.VERTEX_SHADER, vertexShaderSource);
-    const fragmentShader = this.loadShader(this.gl.FRAGMENT_SHADER, fragmentShaderSource);
-
-    const shaderProgram = this.gl.createProgram();
-    if (!shaderProgram) {
-      throw new Error("Failed to create shader program.");
-    }
-
-    this.gl.attachShader(shaderProgram, vertexShader);
-    this.gl.attachShader(shaderProgram, fragmentShader);
-    this.gl.linkProgram(shaderProgram);
-
-    if (!this.gl.getProgramParameter(shaderProgram, this.gl.LINK_STATUS)) {
-      throw new Error("Failed to link shader program: " + this.gl.getProgramInfoLog(shaderProgram));
-    }
-
-    return shaderProgram;
-  }
-
-  private loadShader(type: number, source: string): WebGLShader {
-    const shader = this.gl.createShader(type);
-    if (!shader) {
-      throw new Error("Failed to create shader.");
-    }
-
-    this.gl.shaderSource(shader, source);
-    this.gl.compileShader(shader);
-
-    if (!this.gl.getShaderParameter(shader, this.gl.COMPILE_STATUS)) {
-      throw new Error("Failed to compile shader: " + this.gl.getShaderInfoLog(shader));
-    }
-
-    return shader;
-  }
-
-  public use(): void {
-    this.gl.useProgram(this.shaderProgram);
-  }
-
-  public getProgram(): WebGLProgram {
-    return this.shaderProgram;
-  }
-}
+// Start the render loop
+render();
