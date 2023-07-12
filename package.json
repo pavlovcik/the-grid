@@ -4,8 +4,8 @@
     "start": "run-s start:ui",
     "format": "prettier --write .",
     "build": "run-s utils:build",
-    "start:ui": "tsx server.ts",
-    "utils:build": "tsx esbuild.ts"
+    "start:ui": "tsx build/server.ts",
+    "utils:build": "tsx build/esbuild.ts"
   },
   "dependencies": {
     "@types/node": "^20.4.1",
