@@ -13,8 +13,8 @@ window.onload = () => {
     const vertices = new Float32Array([
         -1, 1,
         -1, -1,
-        1, -1,
         1, 1,
+        1, -1
     ]);
 
     const buffer = gl.createBuffer();
@@ -26,10 +26,14 @@ window.onload = () => {
     gl.enableVertexAttribArray(position);
 
     function render() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        gl.viewport(0, 0, canvas.width, canvas.height);
+
         gl.clearColor(0, 0, 0, 0);
         gl.clear(gl.COLOR_BUFFER_BIT);
 
-        gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
         requestAnimationFrame(render);
     }
@@ -58,11 +62,11 @@ class Shader {
             precision mediump float;
             void main() {
                 vec2 tilePosition = mod(gl_FragCoord.xy, 24.0);
-                vec3 color = vec3(1.0, 1.0, 1.0);
-                if (tilePosition.x > 0.0 || tilePosition.y > 0.0) {
-                    color = vec3(0.0, 0.0, 0.0);
+                if (tilePosition.x < 1.0 && tilePosition.y > 23.0) {
+                    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+                } else {
+                    discard;
                 }
-                gl_FragColor = vec4(color, 1.0);
             }
         `;
 

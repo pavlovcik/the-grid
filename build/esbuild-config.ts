@@ -47,12 +47,6 @@ export let esBuildContext = {
     ".html": "copy",
   },
   outdir: _static.dist,
-  // watch: {
-  //   onRebuild(error, result) {
-  //     if (error) console.error("watch build failed:", error);
-  //     else console.log("watch build succeeded:", result);
-  //   },
-  // },
 } as esbuild.BuildOptions;
 
 function prependCommonRoot(commonRoot: string, entry: string) {
