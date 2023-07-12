@@ -64,14 +64,15 @@ class Shader {
         }
 
         void main() {
+            vec3 color = vec3(128.0/255.0, 128.0/255.0, 128.0/255.0); // #808080
             vec2 tilePosition = mod(gl_FragCoord.xy, 24.0);
             vec2 tileNumber = floor(gl_FragCoord.xy / 24.0);
             float randomVal = rand(tileNumber);
             float opacity = randomVal * randomVal;
-            vec4 backgroundColor = vec4(vec3(1.0), opacity);
+            vec4 backgroundColor = vec4(color, opacity);
 
             if (tilePosition.x > 23.0 && tilePosition.y < 1.0) {
-                gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+                gl_FragColor = vec4(color, 1.0); // Full opacity for the dot
             } else {
                 gl_FragColor = backgroundColor;
             }
