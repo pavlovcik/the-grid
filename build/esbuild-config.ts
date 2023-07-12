@@ -2,7 +2,7 @@ import esbuild from "esbuild";
 
 //
 
-const _static = {
+export const _static = {
   src: "src/",
   dist: "dist/",
 };

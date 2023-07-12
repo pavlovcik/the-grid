@@ -1,10 +1,10 @@
 import esbuild from "esbuild";
-import { esBuildContext } from "./esbuild-config";
+import { esBuildContext, _static } from "./esbuild-config";
 
 (async function server() {
   const context = await esbuild.context(esBuildContext);
   return await context.serve({
-    servedir: "static",
+    servedir: _static.dist,
     port: 8080,
   });
 })();
