@@ -54,16 +54,16 @@ class Shader {
         `;
 
     const fragmentShaderSource = `
-            precision mediump float;
-            void main() {
-                vec2 tilePosition = mod(gl_FragCoord.xy, 24.0);
-                if (tilePosition.x < 1.0 && tilePosition.y > 23.0) {
-                    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-                } else {
-                    discard;
-                }
+        precision mediump float;
+        void main() {
+            vec2 tilePosition = mod(gl_FragCoord.xy, 24.0);
+            if (tilePosition.x > 23.0 && tilePosition.y < 1.0) {
+                gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+            } else {
+                discard;
             }
-        `;
+        }
+    `;
 
     const vertexShader = this.loadShader(this.gl.VERTEX_SHADER, vertexShaderSource);
     const fragmentShader = this.loadShader(this.gl.FRAGMENT_SHADER, fragmentShaderSource);
