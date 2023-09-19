@@ -1,8 +1,3 @@
-* {
-}
-body {
-  /* background: cyan; */
-}
 body,
 html,
 canvas {
@@ -43,6 +38,16 @@ canvas {
   margin-left: 9mm;
 }
 
-body{
-  background-color: #808080;
+body {
+  /* background-color: #808080; */
 }
+#mastercard {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+figure {
+  margin: auto;
+}
+
+#GRID{ filter:invert(1); }
