@@ -20,6 +20,7 @@ const html = {
   styles = {
     root: "styles/",
     entries: [
+      "the-grid.css",
       // "devpool-claims/devpool-claims.css", "audit-report/audit.css", "onboarding/onboarding.css"
     ],
   };

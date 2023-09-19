@@ -137,12 +137,9 @@ export function grid(node = document.body) {
   }
 
   // Handle window resize
-  window.addEventListener("resize", () => {
-    resizeCanvasToDisplaySize(canvas);
-  });
+  window.addEventListener("resize", () => resizeCanvasToDisplaySize(canvas));
 
   // Start the render loop
   render();
 }
-
-grid();
+grid(document.getElementById("GRID")!);

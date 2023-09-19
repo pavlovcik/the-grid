@@ -1,0 +1,48 @@
+* {
+}
+body {
+  /* background: cyan; */
+}
+body,
+html,
+canvas {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+:root {
+  --card-width: 85.6mm;
+  --card-height: 53.98mm;
+}
+#card {
+  width: var(--card-width);
+  height: var(--card-height);
+  position: relative;
+  /* background-color: #fff; */
+  display: inline-block;
+  border-radius: 1mm;
+  overflow: hidden;
+  position: fixed;
+  /* bottom: 0; */
+  /* left: 0; */
+  top: 50%;
+  backdrop-filter: invert(1);
+}
+
+#emv {
+  /* fill: #808080; */
+  overflow: hidden;
+  background-color: #808080;
+  width: 11mm;
+  height: 8mm;
+  bottom: 23mm;
+  border-radius: 1mm;
+  position: absolute;
+  margin-left: 9mm;
+}
+
+body{
+  background-color: #808080;
+}
