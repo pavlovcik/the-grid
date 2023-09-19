@@ -21,8 +21,8 @@ canvas {
   position: relative;
   /* bottom: 0; */
   /* left: 0; */
-  top: 50%;
   backdrop-filter: invert(1);
+  box-shadow: 0mm 4mm 8mm #00000080;
 }
 
 #emv {
@@ -40,13 +40,22 @@ canvas {
 body {
   /* background-color: #808080; */
 }
+#tpay {
+  top: 0;
+  right: 0;
+  width: 8mm;
+  margin: 3mm;
+}
 #mastercard {
-  position: absolute;
   bottom: 0;
   right: 0;
+  /* filter: grayscale(1); */
 }
 figure {
+  position: absolute;
   margin: auto;
+  width: 11mm;
+  margin: 2mm 3mm;
 }
 
 #GRID {
@@ -62,8 +71,22 @@ figure {
   height: 100%;
 }
 
-#vwrap{
+#vwrap {
   display: table-cell;
   vertical-align: middle;
   text-align: center;
+}
+
+#ubiquity {
+  /* transform: translateY(-25%); */
+  /* position: absolute; */
+  /* right: 0; */
+  /* top: 0; */
+  width: 55%;
+  height: var(--card-height);
+  /* max-width: calc(var(--card-width)); */
+  /* max-height: calc(var(--card-height)); */
+  text-align: center;
+  margin: auto;
+  filter: grayscale(1);
 }
