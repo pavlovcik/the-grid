@@ -4,12 +4,12 @@ export function grid(node = document.body) {
   const devicePixelRatio = window.devicePixelRatio || 1;
 
   // get parent node rendered width and height
-  const nodeWidth = node.parentElement?.offsetWidth || window.innerWidth;
-  const nodeHeight = node.parentElement?.offsetHeight || window.innerHeight;
+  const parentNodeWidth = node.parentElement?.offsetWidth || window.innerWidth;
+  const parentNodeHeight = node.parentElement?.offsetHeight || window.innerHeight;
 
-  canvas.width = nodeWidth * devicePixelRatio;
-  canvas.height = nodeHeight * devicePixelRatio;
-  node.appendChild(canvas);
+  canvas.width = parentNodeWidth * devicePixelRatio;
+  canvas.height = parentNodeHeight * devicePixelRatio;
+  node.insertBefore(canvas, node.firstChild);
 
   const gl = canvas.getContext("webgl") as WebGLRenderingContext;
 
@@ -107,8 +107,9 @@ export function grid(node = document.body) {
   // Resize function
   function resizeCanvasToDisplaySize(canvas: HTMLCanvasElement) {
     // Lookup the size the browser is displaying the canvas.
-    var displayWidth = nodeWidth;
-    var displayHeight = nodeHeight;
+
+    const displayWidth = node.parentElement?.offsetWidth || window.innerWidth;
+    const displayHeight = node.parentElement?.offsetHeight || window.innerHeight;
 
     // Check if the canvas is not the same size.
     if (canvas.width != displayWidth || canvas.height != displayHeight) {
@@ -147,4 +148,3 @@ export function grid(node = document.body) {
   // Start the render loop
   render();
 }
-grid(document.getElementById("GRID")!);

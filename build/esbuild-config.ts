@@ -14,6 +14,7 @@ const html = {
     root: "scripts/",
     entries: [
       "the-grid.ts",
+      "card.ts",
       // "devpool-claims/index.ts", "audit-report/audit.ts", "onboarding/onboarding.ts", "key-generator/keygen.ts"
     ],
   },
