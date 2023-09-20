@@ -135,3 +135,5 @@ figure {
 #vwrap {
   perspective: 100mm;
 }
+
+#background { filter: invert(1)}
