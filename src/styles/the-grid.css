@@ -89,6 +89,7 @@ figure {
   /* margin: auto; */
   /* filter: grayscale(1); */
   width: 8mm;
+  top: 0;
 }
 
 #GRID {

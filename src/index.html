@@ -1,6 +1,23 @@
 <!doctype html>
 <html>
   <head>
+    <meta charset="utf-8" />
+    <!-- iphone maintain correct zoom -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <!-- iphone fullscreen -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- iphone status bar style -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <!-- iphone icons -->
+    <!-- <link rel="apple-touch-icon" href="images/icon.png" /> -->
+    <!-- <link rel="apple-touch-icon" sizes="72x72" href="images/icon-72.png" /> -->
+    <!-- <link rel="apple-touch-icon" sizes="114x114" href="images/icon-114.png" /> -->
+    <!-- iphone startup images -->
+    <!-- <link rel="apple-touch-startup-image" href="images/startup.png" /> -->
+    <!-- <link rel="apple-touch-startup-image" sizes="72x72" href="images/startup-72.png" /> -->
+    <!-- <link rel="apple-touch-startup-image" sizes="114x114" href="images/startup-114.png" /> -->
+    <!-- iphone splash screen -->
+    <!-- <link rel="apple-touch-startup-image" href="images/splash.png" /> -->
     <script>
       new EventSource("/esbuild").addEventListener("change", e => {
         const { added, removed, updated } = JSON.parse(e.data);
