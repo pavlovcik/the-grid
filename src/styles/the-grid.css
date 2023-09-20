@@ -1,6 +1,5 @@
 body,
-html,
-canvas {
+html{
   margin: 0;
   padding: 0;
   width: 100%;
@@ -16,12 +15,12 @@ canvas {
   height: var(--card-height);
   /* background-color: #fff; */
   display: inline-block;
-  border-radius: 1mm;
+  border-radius: 2mm;
   overflow: hidden;
   position: relative;
   /* bottom: 0; */
   /* left: 0; */
-  backdrop-filter: invert(1);
+  /* backdrop-filter: invert(1); */
   box-shadow: 0mm 4mm 8mm #00000080;
 }
 
@@ -59,7 +58,7 @@ figure {
 }
 
 #GRID {
-  filter: invert(1);
+  /* filter: invert(1); */
 }
 #stage {
   display: table;
@@ -82,11 +81,20 @@ figure {
   /* position: absolute; */
   /* right: 0; */
   /* top: 0; */
-  width: 55%;
-  height: var(--card-height);
+  /* width: 55%; */
+  /* height: var(--card-height); */
   /* max-width: calc(var(--card-width)); */
   /* max-height: calc(var(--card-height)); */
-  text-align: center;
-  margin: auto;
-  filter: grayscale(1);
+  /* text-align: center; */
+  /* margin: auto; */
+  /* filter: grayscale(1); */
+  width: 8mm;
+}
+
+#GRID {
+  /* filter: invert(1); */
+}
+
+#ubiquity path {
+  fill: #808080;
 }

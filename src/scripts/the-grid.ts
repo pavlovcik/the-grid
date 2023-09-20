@@ -2,8 +2,13 @@ export function grid(node = document.body) {
   // Create canvas and WebGL context
   const canvas = document.createElement("canvas");
   const devicePixelRatio = window.devicePixelRatio || 1;
-  canvas.width = window.innerWidth * devicePixelRatio;
-  canvas.height = window.innerHeight * devicePixelRatio;
+
+  // get parent node rendered width and height
+  const nodeWidth = node.parentElement?.offsetWidth || window.innerWidth;
+  const nodeHeight = node.parentElement?.offsetHeight || window.innerHeight;
+
+  canvas.width = nodeWidth * devicePixelRatio;
+  canvas.height = nodeHeight * devicePixelRatio;
   node.appendChild(canvas);
 
   const gl = canvas.getContext("webgl") as WebGLRenderingContext;
@@ -32,7 +37,7 @@ export function grid(node = document.body) {
     }
 
     void main() {
-        vec3 color = vec3(128.0/255.0, 128.0/255.0, 128.0/255.0); // #808080
+        vec3 color = vec3(0.5, 0.5, 0.5);
         vec2 tilePosition = mod(gl_FragCoord.xy, 24.0);
         vec2 tileNumber = floor(gl_FragCoord.xy / 24.0);
 
@@ -40,7 +45,7 @@ export function grid(node = document.body) {
         float phase = fract(u_time / period / 8.0); // Animation eight times slower
         float opacity = (1.0 - abs(phase * 2.0 - 1.0)) * 0.125; // Limit maximum opacity to 0.25
 
-        vec4 backgroundColor = vec4(color, opacity);
+        vec4 backgroundColor = vec4(color /* + vec3(0.0, 0.0, 0.0) * opacity */, opacity);
 
         if (tilePosition.x > 23.0 && tilePosition.y < 1.0) {
           gl_FragColor = vec4(color, 1.0); // Full opacity for the dot
@@ -102,8 +107,8 @@ export function grid(node = document.body) {
   // Resize function
   function resizeCanvasToDisplaySize(canvas: HTMLCanvasElement) {
     // Lookup the size the browser is displaying the canvas.
-    var displayWidth = window.innerWidth;
-    var displayHeight = window.innerHeight;
+    var displayWidth = nodeWidth;
+    var displayHeight = nodeHeight;
 
     // Check if the canvas is not the same size.
     if (canvas.width != displayWidth || canvas.height != displayHeight) {
