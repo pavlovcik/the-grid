@@ -11,6 +11,7 @@ html {
   --card-height: 53.98mm;
 }
 #card {
+  background-color: #fff;
   width: var(--card-width);
   height: var(--card-height);
   /* background-color: #fff; */
